@@ -20,7 +20,7 @@ class App extends Component {
 
   componentDidMount() {
     const localState = JSON.parse(localStorage.getItem('Contacts'))
-    this.setState({ contacts: localState })
+    if (localState) { this.setState({ contacts: localState }) } else{return}
   };
 
   componentDidUpdate(prevState) {
@@ -38,8 +38,7 @@ class App extends Component {
     const id = shortid.generate();
     const contactObject = { ...data, id };
 
-      if (this.state.contacts !== null &&
-        this.state.contacts.find(
+      if (this.state.contacts.find(
           (contact) => contact.name.toLowerCase() === data.name.toLowerCase()
         )
       ) {
@@ -79,9 +78,8 @@ class App extends Component {
         <h1>Phonebook</h1>
         <Form submit={this.handleSubmit} />
         <h2>Contacts</h2>
-        {this.state.contacts===null? null : this.state.contacts.length===0? null:
-          <Filter filterInput={this.filterleInputChange} filterValue={filter} />}
-        {this.state.contacts===null? <p>No Contacts</p> :
+        {this.state.contacts.length===0? null : <Filter filterInput={this.filterleInputChange} filterValue={filter} />}
+        {this.state.contacts.length===0? <p>No Contacts</p> :
           <Contacts
           contacts={this.visiblecontact()}
           deleteContact={this.deleteContact}
